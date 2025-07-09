@@ -1,5 +1,6 @@
 package com.foodiary.foodiary.controller;
 
+import com.foodiary.foodiary.dto.UserDTO;
 import com.foodiary.foodiary.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -16,11 +17,11 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String register(@RequestParam String email, @RequestParam String password) {
-        if (userService.isEmailDuplicated(email)) {
+    public String register(@RequestBody UserDTO userDTO) {
+        if (userService.isEmailDuplicated(userDTO.getEmail())) {
             return "이미 존재하는 이메일입니다.";
         }
-        userService.register(email, password);
+        userService.register(userDTO.getEmail(), userDTO.getPassword());
         return "회원가입 성공";
     }
 }
