@@ -1,26 +1,36 @@
 package com.foodiary.foodiary.config;
 
+import com.foodiary.foodiary.jwt.JwtUtil;
+import com.foodiary.foodiary.jwt.JwtAuthFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+    private final JwtUtil jwtUtil;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .csrf(AbstractHttpConfigurer::disable) // CSRF 비활성화 (개발용)
+        return http
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(Customizer.withDefaults())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll() // 모든 요청 허용
+                        .requestMatchers("/user/login", "/user/register").permitAll()
+                        .anyRequest().authenticated()
                 )
-                .formLogin(AbstractHttpConfigurer::disable) // 로그인 화면 끔
-                .httpBasic(Customizer.withDefaults()); // 기본 인증 설정
-        return http.build();
+                .addFilterBefore(new JwtAuthFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .build();
     }
 
     @Bean
