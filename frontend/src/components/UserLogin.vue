@@ -18,6 +18,7 @@
 
 <script>
 import axios from 'axios';
+import router from "@/router";
 
 export default {
   name: 'UserLogin',
@@ -39,9 +40,13 @@ export default {
         const token = response.data.token;
         localStorage.setItem('token', token);  // 💡 저장!
         this.message = '로그인 성공!';
+        console.log("success login");
 
         // 로그인 후 메인 페이지로 이동 예시
-        this.$router.push('/');
+        console.log("router 이동1");
+        console.log(router);
+        router.push('/');
+        console.log("router 이동");
       } catch (error) {
         this.message = error.response?.data || '로그인 실패';
       }

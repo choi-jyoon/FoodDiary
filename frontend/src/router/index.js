@@ -1,24 +1,27 @@
 // src/router/index.js
 import { createRouter, createWebHistory } from 'vue-router';
 import UserRegister from '../components/UserRegister.vue';
-import Home from "../components/Home.vue";
+import MainHome from "../components/MainHome.vue";
 import UserLogin from "../components/UserLogin.vue"
 
 const routes = [
     {
         path: '/',
-        name: 'Home',
-        component: Home,
+        name: 'MainHome',
+        component: MainHome,
+        meta: { requiresAuth: true}
     },
     {
         path: '/user/register',
         name: 'UserRegister',
         component: UserRegister,
+        meta: { requiresAuth: false }
     },
     {
         path: '/user/login',
         name: 'UserLogin',
-        component: UserLogin
+        component: UserLogin,
+        meta: { requiresAuth: false }
     }
 ];
 
@@ -27,4 +30,14 @@ const router = createRouter({
     routes,
 });
 
+router.beforeEach((to, from, next) => {
+    const token = localStorage.getItem('token')
+
+    if (to.meta.requiresAuth && !token) {
+        next('/user/login')
+    }
+    else {
+        next()
+    }
+})
 export default router;
