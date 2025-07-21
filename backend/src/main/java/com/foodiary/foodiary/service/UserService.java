@@ -19,7 +19,9 @@ public class UserService {
 
     public void register(String email, String password) {
         String encoded = passwordEncoder.encode(password);
-        User user = new User(null, email, encoded);
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(encoded);
         userRepository.save(user);
     }
 

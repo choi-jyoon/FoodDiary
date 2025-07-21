@@ -7,22 +7,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "user")
-@Getter @Setter
+@Table(name = "food_thema")
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
-
+public class Foodthema {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
-    private String email;
-
-    @Column(nullable = false)
-    private String password;
-
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
-    private Profile profile;
+    @Column(unique = true)
+    private String name;
+    @Column(nullable = true)
+    private String comment;
 }

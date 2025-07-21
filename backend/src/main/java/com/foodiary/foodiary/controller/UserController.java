@@ -31,8 +31,4 @@ public class UserController {
         return "회원가입 성공";
     }
 
-//    @PostMapping("/logout")
-//    public String logout(@RequestBody token) {
-//
-//    }
 }
