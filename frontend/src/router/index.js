@@ -2,14 +2,18 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import UserRegister from '../components/UserRegister.vue';
 import MainHome from "../components/MainHome.vue";
-import UserLogin from "../components/UserLogin.vue"
+import UserLogin from "../components/UserLogin.vue";
+import ProfileHome from "../components/ProfileHome.vue";
+import ProfileEdit from "@/components/ProfileEdit.vue";
+import RefrigeratorManage from "@/components/RefrigeratorManage.vue";
+import IngredientCreate from "@/components/IngredientCreate.vue";
 
 const routes = [
     {
         path: '/',
         name: 'MainHome',
         component: MainHome,
-        meta: { requiresAuth: true}
+        meta: { requiresAuth: false}
     },
     {
         path: '/user/register',
@@ -22,7 +26,31 @@ const routes = [
         name: 'UserLogin',
         component: UserLogin,
         meta: { requiresAuth: false }
-    }
+    },
+    {
+        path: '/profile',
+        name: 'ProfileHome',
+        component: ProfileHome,
+        meta: { requiresAuth: true}
+    },
+    {
+        path: '/profile/edit',
+        name: 'ProfileEdit',
+        component: ProfileEdit,
+        meta: { requiresAuth: true}
+    },
+    {
+        path: '/refrigerator',
+        name: 'RefrigeratorManage',
+        component: RefrigeratorManage,
+        meta: { requiresAuth: true}
+    },
+    {
+        path: '/refrigerator/create',
+        name: 'IngredientCreate',
+        component: IngredientCreate,
+        meta: { requiresAuth: true}
+    },
 ];
 
 const router = createRouter({
