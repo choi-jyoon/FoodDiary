@@ -1,8 +1,12 @@
 package com.foodiary.foodiary.controller;
 
+import com.foodiary.foodiary.dto.IngredientDTO;
+import com.foodiary.foodiary.dto.RefrigeratorDTO;
 import com.foodiary.foodiary.entity.Ingredient;
 import com.foodiary.foodiary.entity.Refrigerator;
+import com.foodiary.foodiary.service.RefrigeratorService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,13 +15,19 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class RefrigeratorController {
 
-    @GetMapping("/")
-    public String getMyRefrigerator() {
-        return "refrigerator";
+    private final RefrigeratorService refrigeratorService;
+
+    @GetMapping("")
+    public RefrigeratorDTO getMyRefrigerator() {
+
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        return refrigeratorService.getRefrigerator(email);
     }
 
     @PostMapping("/create")
-    public String createRefrigerator(@RequestBody Ingredient ingredient) {
+    public String createRefrigerator(@RequestBody IngredientDTO ingredientDTO) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        refrigeratorService.createIngredient(email, ingredientDTO);
         return "success to add ingredient";
     }
 

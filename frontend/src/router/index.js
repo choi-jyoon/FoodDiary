@@ -51,6 +51,12 @@ const routes = [
         component: IngredientCreate,
         meta: { requiresAuth: true}
     },
+    {
+        path: '/refrigerator/update',
+        name: 'IngredientUpdate',
+        component: IngredientCreate,
+        meta: { requiresAuth: true}
+    },
 ];
 
 const router = createRouter({

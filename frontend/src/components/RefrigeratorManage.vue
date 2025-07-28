@@ -8,7 +8,7 @@
         <h3>냉동칸</h3>
         <div class="item-grid">
           <div v-for="item in frozenItems" :key="item.id" class="item">
-            <input type="checkbox" />
+            <button class="edit-btn" @click="goUpdate(item)"></button>
             <i :class="item.icon"></i>
             <span>{{ item.name }}</span>
           </div>
@@ -20,7 +20,7 @@
         <h3>냉장칸</h3>
         <div class="item-grid">
           <div v-for="item in chilledItems" :key="item.id" class="item">
-            <input type="checkbox" />
+            <button class="edit-btn" @click="goUpdate(item)"></button>
             <i :class="item.icon"></i>
             <span>{{ item.name }}</span>
           </div>
@@ -39,7 +39,9 @@ export default {
   name: 'RefrigeratorManage',
   data() {
     return {
-      refrigerator: null,
+      ingredients: [],
+      frozenItems: [],
+      chilledItems: [],
       message: '',
     };
   },
@@ -50,20 +52,35 @@ export default {
     async loadRefrigerator() {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:8081/refrigerator/", {
+        const response = await axios.get("http://localhost:8081/refrigerator", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        this.refrigerator = response.data;
+        this.ingredients = response.data.ingredients;
+
+        // 냉동/냉장 분리
+        this.frozenItems = this.ingredients.filter(item => item.section === "냉동");
+        this.chilledItems = this.ingredients.filter(item => item.section === "냉장");
+
       } catch (error) {
         this.message = error.response?.data || '냉장고 불러오기 실패';
-        this.refrigerator = null;
+        this.ingredients = [];
       }
     },
     goCreate() {
       this.$router.push("/refrigerator/create");
     },
-    goUpdate() {
-      this.$router.push("/refrigerator/update");
+    goUpdate(item) {
+      this.$router.push({
+        path: '/refrigerator/update',
+        query: {
+          id: item.id,
+          name: item.name,
+          amount: item.amount,
+          category: item.category,
+          expiration_date: item.expirationDate,
+          section: item.section
+        }
+      });
     }
   },
 };

@@ -12,6 +12,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RefrigeratorDTO {
-    private User user;
-    private List<Ingredient> ingredients;
+    private String userEmail;
+    private List<IngredientDTO> ingredients;
 }
