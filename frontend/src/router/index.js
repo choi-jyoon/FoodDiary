@@ -7,6 +7,8 @@ import ProfileHome from "../components/ProfileHome.vue";
 import ProfileEdit from "@/components/ProfileEdit.vue";
 import RefrigeratorManage from "@/components/RefrigeratorManage.vue";
 import IngredientCreate from "@/components/IngredientCreate.vue";
+import MainCalendar  from "@/components/MainCalendar.vue";
+import DietCalendar from "@/components/DietCalendar.vue";
 
 const routes = [
     {
@@ -57,6 +59,18 @@ const routes = [
         component: IngredientCreate,
         meta: { requiresAuth: true}
     },
+    {
+        path: "/calender",
+        name: 'VueCalendar',
+        component: MainCalendar,
+        meta: {requiresAuth: false}
+    },
+    {
+        path: "/diet/:date",
+        name: 'DietCalendar',
+        component: DietCalendar,
+        meta: {requiresAuth: false}
+    }
 ];
 
 const router = createRouter({
