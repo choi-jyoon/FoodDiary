@@ -9,6 +9,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class IngredientDTO {
+    private Long id;
     private String name;
     private double amount;
     private String category;

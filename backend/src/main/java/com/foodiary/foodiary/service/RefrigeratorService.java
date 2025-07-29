@@ -32,6 +32,7 @@ public class RefrigeratorService {
         List<Ingredient> ingredients = ingredientRepository.findByRefrigerator(refrigerator);
         List<IngredientDTO> ingredientDTOs = ingredients.stream()
                 .map(i -> new IngredientDTO(
+                        i.getId(),
                         i.getName(),
                         i.getAmount(),
                         i.getCategory(),
@@ -55,15 +56,15 @@ public class RefrigeratorService {
 
     }
 
-    public IngredientDTO updateIngredient(String email, IngredientDTO ingredientDTO, Long ingredientId) {
-        User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-
-        Refrigerator refrigerator = refrigeratorRepository.findByUser(user).orElseGet(()->{Refrigerator newRefrigerator =  new Refrigerator(0, new Date(), user );
-            System.out.println("refrigerator" + newRefrigerator);
-            return  refrigeratorRepository.save(newRefrigerator);});
+    public IngredientDTO updateIngredient(Long ingredientId, IngredientDTO ingredientDTO) {
 
         Ingredient ingredient = ingredientRepository.findById(ingredientId).orElseThrow(() -> new UsernameNotFoundException("Ingredient not found"));
-        IngredientDTO newIngredientDTO = new IngredientDTO(ingredient.getName(), ingredient.getAmount(), ingredient.getCategory(), ingredient.getExpirationDate(), ingredient.getSection());
+        IngredientDTO newIngredientDTO = new IngredientDTO(ingredient.getId(), ingredient.getName(), ingredient.getAmount(), ingredient.getCategory(), ingredient.getExpirationDate(), ingredient.getSection());
+        ingredient.setName(ingredientDTO.getName());
+        ingredient.setAmount(ingredientDTO.getAmount());
+        ingredient.setCategory(ingredientDTO.getCategory());
+        ingredient.setExpirationDate(ingredientDTO.getExpirationDate());
+        ingredient.setSection(ingredientDTO.getSection());
         ingredientRepository.save(ingredient);
         return newIngredientDTO;
     }

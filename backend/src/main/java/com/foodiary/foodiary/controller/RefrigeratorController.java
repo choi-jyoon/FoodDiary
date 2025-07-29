@@ -32,7 +32,9 @@ public class RefrigeratorController {
     }
 
     @PutMapping("/update/{ingredient_id}")
-    public String updateRefrigerator(@PathVariable Long ingredient_id, @RequestBody Ingredient ingredient) {
+    public String updateRefrigerator(@PathVariable Long ingredient_id, @RequestBody IngredientDTO ingredientDTO) {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        refrigeratorService.updateIngredient(ingredient_id, ingredientDTO);
         return "success to update ingredient";
     }
 }

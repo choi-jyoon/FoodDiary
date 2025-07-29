@@ -5,7 +5,7 @@
     <div class="profile-edit-card">
       <div class="form-group">
         <label>재료명</label>
-        <input v-model="name" placeholder="예: 계란" />
+        <input v-model="name" :placeholder = "isUpdate ? name: '예: 계란'" />
       </div>
 
       <div class="form-group">
@@ -65,16 +65,18 @@ export default {
   async mounted() {
     const query = this.$route.query;
 
-    if (query && query.id) {
+    if (query.id) {
       // ✏️ 수정 모드
+      console.log(query);
       this.isUpdate = true;
       this.id = query.id;
       this.name = query.name || "";
       this.amount = Number(query.amount) || null;
       this.category = query.category || "";
-      this.expiration_date = query.expiration_date || null;
+      this.expiration_date = query.expiration_date.slice(0, 10) || null;
       this.section = query.section || "";
     }
+    console.log(name);
   },
   methods: {
     async submitRefrigerator() {
