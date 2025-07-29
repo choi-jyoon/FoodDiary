@@ -12,7 +12,7 @@ const router = useRouter()
 
 function logout() {
   localStorage.removeItem('token')
-  router.push('/user/login')
+  router.push('/login')
 }
 </script>
 

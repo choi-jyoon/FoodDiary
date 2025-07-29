@@ -16,13 +16,13 @@ const routes = [
         meta: { requiresAuth: false}
     },
     {
-        path: '/user/register',
+        path: '/register',
         name: 'UserRegister',
         component: UserRegister,
         meta: { requiresAuth: false }
     },
     {
-        path: '/user/login',
+        path: '/login',
         name: 'UserLogin',
         component: UserLogin,
         meta: { requiresAuth: false }
@@ -68,7 +68,7 @@ router.beforeEach((to, from, next) => {
     const token = localStorage.getItem('token')
 
     if (to.meta.requiresAuth && !token) {
-        next('/user/login')
+        next('/login')
     }
     else {
         next()
