@@ -9,6 +9,8 @@ import RefrigeratorManage from "@/components/RefrigeratorManage.vue";
 import IngredientCreate from "@/components/IngredientCreate.vue";
 import MainCalendar  from "@/components/MainCalendar.vue";
 import DietCalendar from "@/components/DietCalendar.vue";
+import DietWrite from "@/components/DietWrite.vue";
+import CustomDietWrite from '@/components/CustomDietWrite.vue';
 
 const routes = [
     {
@@ -60,8 +62,8 @@ const routes = [
         meta: { requiresAuth: true}
     },
     {
-        path: "/calender",
-        name: 'VueCalendar',
+        path: "/calendar",
+        name: 'MainCalendar',
         component: MainCalendar,
         meta: {requiresAuth: false}
     },
@@ -69,6 +71,18 @@ const routes = [
         path: "/diet/:date",
         name: 'DietCalendar',
         component: DietCalendar,
+        meta: {requiresAuth: false}
+    },
+    {
+        path: "/diet/:date/write",
+        name: 'DietWrite',
+        component: DietWrite,
+        meta: {requiresAuth: false}
+    },
+    {
+        path: "/diet/:date/write/custom",
+        name: 'CustomDietWrite',
+        component: CustomDietWrite,
         meta: {requiresAuth: false}
     }
 ];

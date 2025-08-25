@@ -1,48 +1,57 @@
 <template>
   <div class="refrigerator-container">
-    <h2 class="refrigerator-title">🥶 나의 냉장고</h2>
+    <h2 class="title">🧊 나의 냉장고</h2>
 
     <div class="fridge-box">
-      <!-- 냉동칸 -->
-      <div class="fridge-section">
+      <div class="section" id="frozen">
         <h3>냉동칸</h3>
-        <div class="item-grid">
-          <div v-for="item in frozenItems" :key="item.id" class="item">
-            <button class="edit-btn" @click="goUpdate(item)"></button>
-            <i :class="item.icon"></i>
-            <span>{{ item.name }}</span>
+        <div class="items-grid">
+          <div
+            v-for="item in frozenItems"
+            :key="item.id"
+            class="ingredient-item"
+            @click="goUpdate(item)"
+          >
+            <div class="icon-circle">
+              <i :class="getIconClass(item.category)"></i>
+            </div>
+            <span class="item-label">{{ item.name }}</span>
           </div>
         </div>
       </div>
 
-      <!-- 냉장칸 -->
-      <div class="fridge-section">
+      <div class="section" id="chilled">
         <h3>냉장칸</h3>
-        <div class="item-grid">
-          <div v-for="item in chilledItems" :key="item.id" class="item">
-            <button class="edit-btn" @click="goUpdate(item)"></button>
-            <i :class="item.icon"></i>
-            <span>{{ item.name }}</span>
+        <div class="items-grid">
+          <div
+            v-for="item in chilledItems"
+            :key="item.id"
+            class="ingredient-item"
+            @click="goUpdate(item)"
+          >
+            <div class="icon-circle">
+              <i :class="getIconClass(item.category)"></i>
+            </div>
+            <span class="item-label">{{ item.name }}</span>
           </div>
         </div>
       </div>
 
-      <!-- 추가 버튼 -->
-      <button class="add-btn" @click="goCreate">➕</button>
+      <button class="add-btn" @click="goCreate">+</button>
     </div>
   </div>
 </template>
+
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
-  name: 'RefrigeratorManage',
+  name: "RefrigeratorManage",
   data() {
     return {
       ingredients: [],
       frozenItems: [],
       chilledItems: [],
-      message: '',
     };
   },
   mounted() {
@@ -52,18 +61,15 @@ export default {
     async loadRefrigerator() {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:8081/refrigerator", {
+        const res = await axios.get("http://localhost:8081/refrigerator", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        this.ingredients = response.data.ingredients;
 
-        // 냉동/냉장 분리
-        this.frozenItems = this.ingredients.filter(item => item.section === "냉동");
-        this.chilledItems = this.ingredients.filter(item => item.section === "냉장");
-
-      } catch (error) {
-        this.message = error.response?.data || '냉장고 불러오기 실패';
-        this.ingredients = [];
+        this.ingredients = res.data.ingredients;
+        this.frozenItems = this.ingredients.filter((i) => i.section == "냉동");
+        this.chilledItems = this.ingredients.filter((i) => i.section == "냉장");
+      } catch (e) {
+        console.error(e);
       }
     },
     goCreate() {
@@ -71,108 +77,127 @@ export default {
     },
     goUpdate(item) {
       this.$router.push({
-        path: '/refrigerator/update',
+        path: "/refrigerator/update",
         query: {
           id: item.id,
           name: item.name,
           amount: item.amount,
           category: item.category,
           expiration_date: item.expirationDate,
-          section: item.section
-        }
+          section: item.section,
+        },
       });
-    }
+    },
+    getIconClass(category) {
+      const map = {
+        육류: "fas fa-drumstick-bite",
+        유제품: "fas fa-solid fa-cheese",
+        계란: "fas fa-solid fa-egg",
+        채소: "fas fa-solid fa-carrot",
+        과일: "fas fa-apple-alt",
+        가공식품: "fas fa-box",
+        생선: "fas fa-solid fa-fish",
+        기타: "fas fa-ice-cream",
+      };
+      return map[category] || "fas fa-question-circle";
+    },
   },
 };
 </script>
+
 <style scoped>
-/* 전체 레이아웃 */
 .refrigerator-container {
-  max-width: 500px;
-  margin: 40px auto;
-  text-align: center;
-  font-family: "Noto Sans KR", sans-serif;
-}
-
-/* 제목 */
-.refrigerator-title {
-  font-size: 26px;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-/* 냉장고 전체 박스 */
-.fridge-box {
-  position: relative;
-  background: #f9f9f9;
-  border: 3px solid #ddd;
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 20px;
+  background-color: #f0f9ff;
   border-radius: 15px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: "Noto Sans KR", sans-serif;
+  text-align: center;
 }
 
-/* 각 칸(냉동/냉장) */
-.fridge-section {
+.title {
+  font-size: 26px;
+  margin-bottom: 24px;
+  font-weight: bold;
+}
+
+.fridge-box {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.section {
+  background-color: #ffffff;
   padding: 15px;
-  border-bottom: 2px solid #e0e0e0;
-}
-.fridge-section:last-child {
-  border-bottom: none;
+  border-radius: 12px;
+  border: 2px solid #d0e7ff;
 }
 
-.fridge-section h3 {
+.section#frozen {
+  border-color: #90cdf4;
+}
+.section#chilled {
+  border-color: #b2f2bb;
+}
+
+.section h3 {
   font-size: 18px;
   margin-bottom: 10px;
+  color: #333;
   text-align: left;
-  color: #444;
 }
 
-/* 아이템 그리드 */
-.item-grid {
+.items-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 12px;
-  margin-top: 10px;
 }
 
-/* 개별 아이템 */
-.item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: white;
-  padding: 8px;
+.ingredient-item {
+  background: #f8fbff;
   border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 10px;
+  text-align: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
 }
-.item input[type="checkbox"] {
-  margin-bottom: 5px;
-}
-.item i {
-  font-size: 24px;
-  color: #555;
-}
-.item span {
-  font-size: 14px;
-  margin-top: 4px;
+.ingredient-item:hover {
+  background-color: #d1fae5; /* hover 시 연초록 포인트 */
+  transform: translateY(-4px);
 }
 
-/* 추가 버튼 */
+.icon-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-color: #e0f2fe;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin: 0 auto 5px;
+  color: #333;
+}
+
+.item-label {
+  font-size: 14px;
+  font-weight: 500;
+}
+
 .add-btn {
-  position: absolute;
-  bottom: 12px;
-  right: 12px;
-  width: 45px;
-  height: 45px;
+  grid-column: span 2;
+  margin-top: 20px;
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  border-radius: 50%;
+  border: none;
   background-color: #4caf50;
   color: white;
-  font-size: 22px;
-  border: none;
-  border-radius: 50%;
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
-.add-btn:hover {
-  background-color: #45a049;
 }
 </style>
