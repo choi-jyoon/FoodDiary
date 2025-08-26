@@ -62,25 +62,25 @@ const routes = [
         meta: { requiresAuth: true}
     },
     {
-        path: "/calendar",
+        path: "/diary",
         name: 'MainCalendar',
         component: MainCalendar,
         meta: {requiresAuth: false}
     },
     {
-        path: "/diet/:date",
+        path: "/diary/:date",
         name: 'DietCalendar',
         component: DietCalendar,
         meta: {requiresAuth: false}
     },
     {
-        path: "/diet/:date/write",
+        path: "/diary/:date/write",
         name: 'DietWrite',
         component: DietWrite,
         meta: {requiresAuth: false}
     },
     {
-        path: "/diet/:date/write/custom",
+        path: "/diary/:date/write/custom",
         name: 'CustomDietWrite',
         component: CustomDietWrite,
         meta: {requiresAuth: false}

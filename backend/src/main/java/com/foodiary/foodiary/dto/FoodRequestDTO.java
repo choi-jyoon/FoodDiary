@@ -22,4 +22,10 @@ public class FoodRequestDTO {
         this.kcal = food.getKcal();
         this.user_id = food.getUser().getId();
     }
+
+    public FoodRequestDTO(String name, String ingredient_list, Long user_id) {
+        this.name=name;
+        this.ingredient_list=ingredient_list;
+        this.user_id=user_id;
+    }
 }

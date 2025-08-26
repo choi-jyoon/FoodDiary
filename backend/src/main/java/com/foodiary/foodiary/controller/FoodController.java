@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping("/food")
 @RequiredArgsConstructor
 public class FoodController {
-    private FoodService foodService;
+    private final FoodService foodService;
 
     @GetMapping("")
     public List<FoodResponseDTO> getAllFood(){
@@ -23,7 +23,7 @@ public class FoodController {
     }
 
     @PostMapping("/create")
-    public FoodRequestDTO createFood(@RequestBody FoodRequestDTO foodDTO){
+    public FoodResponseDTO createFood(@RequestBody FoodRequestDTO foodDTO){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
         return foodService.createFood(email, foodDTO);
     }

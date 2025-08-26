@@ -6,7 +6,15 @@
     </h2>
 
     <div class="profile-edit-card">
-      <!-- 1. 이름 (필수) -->
+      
+      <div class="form-group">
+        <label for="mealType">구분</label>
+        <select id="mealType" v-model="mealType" class="required-field">
+          <option value="breakfast">아침</option>
+          <option value="lunch">점심</option>
+          <option value="dinner">저녁</option>
+        </select>
+      </div>
       <div class="form-group">
         <label for="mealName">식단 이름</label>
         <input 
@@ -74,7 +82,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-// import axios from 'axios'; // API 연동 시 주석 해제!
+import axios from 'axios'; // API 연동 시 주석 해제!
 
 const route = useRoute();
 const router = useRouter();
@@ -83,6 +91,7 @@ const router = useRouter();
 const selectedDate = ref(''); 
 
 // 입력 필드 데이터
+const mealType = ref(null);
 const mealName = ref('');
 const ingredients = ref('');
 const mealImageFile = ref(null); // File 객체를 저장할 ref
@@ -120,11 +129,12 @@ async function submitDiet() {
 
   // 백엔드로 보낼 데이터 준비
   const payload = {
-    date: selectedDate.value, // 현재 날짜 파라미터
-    mealName: mealName.value,
-    ingredients: ingredients.value,
+    // date: selectedDate.value, // 현재 날짜 파라미터
+    mealType: mealType.value,
+    name: mealName.value,
+    ingredient_list: ingredients.value,
     recipe: recipe.value,
-    calories: calories.value // null이면 null, 값이 있으면 숫자
+    kcal: calories.value // null이면 null, 값이 있으면 숫자
   };
 
   // 이미지 파일이 있다면 payload에 추가 (FormData 사용 필요)
@@ -138,23 +148,22 @@ async function submitDiet() {
 
   try {
     // 실제 API 호출 부분 (주석 해제 후 사용)
-    // const token = localStorage.getItem("token"); // 토큰이 있다면 가져오기
-    // if (formData) {
-    //   // 파일 포함 업로드 (Content-Type: multipart/form-data)
-    //   await axios.post("YOUR_API_ENDPOINT/diet/upload", formData, {
-    //     headers: {
-    //       Authorization: `Bearer ${token}`,
-    //       'Content-Type': 'multipart/form-data' // 파일 업로드 시 필수
-    //     }
-    //   });
-    // } else {
-    //   // 파일 없는 경우 (Content-Type: application/json)
-    //   await axios.post("YOUR_API_ENDPOINT/diet/create", payload, {
-    //     headers: {
-    //       Authorization: `Bearer ${token}`
-    //     }
-    //   });
-    // }
+    console.log(payload);
+    const token = localStorage.getItem("token"); // 토큰이 있다면 가져오기
+    if (formData) {
+      // 파일 포함 업로드 (Content-Type: multipart/form-data)
+      await axios.post("http://localhost:8081/diary/${selectedValue.value}/write/custom", formData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data' // 파일 업로드 시 필수
+        }
+      });
+    } else {
+      // 파일 없는 경우 (Content-Type: application/json)
+      await axios.post("http://localhost:8081//diary/${selectedValue.value}/write/custom", payload, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+    }
 
     // 개발 중에는 콘솔에 데이터 출력
     console.log('식단 기록 데이터:', payload);
@@ -221,7 +230,8 @@ function cancelRecord() {
   padding-top: 10px; /* input과 textarea 상단 패딩에 맞춰 라벨도 살짝 내림 */
 }
 .form-group input,
-.form-group textarea { /* textarea도 스타일 적용 */
+.form-group textarea,
+.form-group select { /* textarea도 스타일 적용 */
   width: 65%;
   padding: 10px 12px;
   border: 1px solid #ddd;

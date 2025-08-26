@@ -44,6 +44,7 @@
 <script>
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import axios from 'axios'
 
 export default {
   setup() {
@@ -86,7 +87,7 @@ export default {
 
     onMounted(() => {
       // 컴포넌트 마운트 시, 해당 날짜의 식단 기록을 불러오는 API 호출 (나중에 여기에 구현)
-      // 예시: axios.get(`/api/diet/${selectedDate}`).then(res => { meals.value = res.data })
+      axios.get(`/diary/${selectedDate}`).then(res => { meals.value = res.data })
       // 임시로 데이터 넣어보기 (테스트용)
       // meals.value = {
       //   breakfast: '닭가슴살 샐러드',

@@ -14,19 +14,20 @@ import lombok.Setter;
 public class Food {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
-    @Column
+    @Column(name = "name", nullable = true)
     private String name;
-    @Column
+    @Column(name = "ingredient_list", nullable = true)
     private String ingredient_list;
-    @Column
+    @Column(name = "image", nullable = true)
     private String image;
-    @Column
+    @Column(name = "recipe", nullable = true)
     private String recipe;
-    @Column
+    @Column(name = "kcal", nullable = true)
     private Double kcal;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
@@ -36,6 +37,11 @@ public class Food {
         this.image = image;
         this.recipe = recipe;
         this.kcal = kcal;
+        this.user = user;
+    }
+    public Food(String name, String ingredient_list, User user) {
+        this.name=name;
+        this.ingredient_list=ingredient_list;
         this.user = user;
     }
 }

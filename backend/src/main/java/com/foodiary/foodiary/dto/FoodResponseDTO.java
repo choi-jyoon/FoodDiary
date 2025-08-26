@@ -4,6 +4,7 @@ import com.foodiary.foodiary.entity.Food;
 import lombok.*;
 
 @Data
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class FoodResponseDTO {

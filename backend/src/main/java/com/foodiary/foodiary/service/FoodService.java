@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,16 +28,18 @@ public class FoodService {
 
 
         return foods.stream()
-                .map(food -> new FoodResponseDTO(food))
+                .map(FoodResponseDTO::new)
                 .collect(Collectors.toList());
     }
 
-    public FoodRequestDTO createFood(String email, FoodRequestDTO foodDTO) {
+    public FoodResponseDTO createFood(String email, FoodRequestDTO foodDTO) {
         User user = userRepository.findByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        Food food = new Food(foodDTO.getName(), foodDTO.getIngredient_list(), foodDTO.getImage(), foodDTO.getRecipe(), foodDTO.getKcal(), user);
+        Food food = new Food(foodDTO.getName(), foodDTO.getIngredient_list(), foodDTO.getImage(), foodDTO.getRecipe(), foodDTO.getKcal(),user);
+        System.out.println("----------------------foo");
+        System.out.println(food);
         foodRepository.save(food);
-        return new FoodRequestDTO(food);
+        return new FoodResponseDTO(food);
     }
 
     public FoodResponseDTO getOneFood(String email, Long foodId) {

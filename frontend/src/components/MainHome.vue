@@ -29,10 +29,10 @@ const router = useRouter()
 const today = ref(new Date().toISOString().slice(0, 10))
 
 function goToDietRecord() {
-  router.push(`/diet/${today.value}`)
+  router.push(`/diary/${today.value}`)
 }
 function goToCalendar() {
-  router.push('/calendar')
+  router.push('/diary')
 }
 function goToRecommend() {
   router.push('/recommend')

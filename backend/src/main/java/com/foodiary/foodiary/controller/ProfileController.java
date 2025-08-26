@@ -5,7 +5,6 @@ import com.foodiary.foodiary.entity.Foodthema;
 import com.foodiary.foodiary.entity.User;
 import com.foodiary.foodiary.repository.UserRepository;
 import com.foodiary.foodiary.service.ProfileService;
-import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
