@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/calendar")
 @RequiredArgsConstructor
 public class DiaryController {
-    private final DiaryService diaryService;
+//    private final DiaryService diaryService;
 
 
     @GetMapping("")
